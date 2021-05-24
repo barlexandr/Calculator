@@ -75,8 +75,14 @@ public class Converter {
 
         // Если 2 последних символа одинаковые, то добавляем римскую интерпритацию символов к ответу
         // ***так как массив по размеру массива -1
-        if(arrayKeyOfValue[arrayKeyOfValue.length - 1] == arrayKeyOfValue[arrayKeyOfValue.length - 2]){
-            resultOfConverse += arrayKeyOfValue[arrayKeyOfValue.length - 1];
+        if(arrayKeyOfValue.length >= 2) {
+            if (arrayKeyOfValue[arrayKeyOfValue.length - 1] == arrayKeyOfValue[arrayKeyOfValue.length - 2]) {
+                resultOfConverse += arrayKeyOfValue[arrayKeyOfValue.length - 1];
+            }
+        }
+
+        if(arrayKeyOfValue.length == 1){
+            resultOfConverse += arrayKeyOfValue[0];
         }
 
         return Integer.toString(resultOfConverse);

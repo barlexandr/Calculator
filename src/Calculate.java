@@ -12,6 +12,7 @@ public class Calculate {
             return true;
         return false;
     }
+
     // Проверка на разделитель
     private static boolean isDelimiter(Character input){
         if ((" ".indexOf(input)) != -1)
