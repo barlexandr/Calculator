@@ -15,6 +15,8 @@ public class Converter {
         put(50, "L");
         put(90, "XC");
         put(100, "C");
+        put(500, "D");
+        put(1000, "M");
     }};
 
     // Поиск ключа по значению
@@ -54,35 +56,17 @@ public class Converter {
 
         // Создаем и заполняем массив значениями ключей римских написаний цифр
         int[] arrayKeyOfValue = new int[inputOperand.length()];
-        for (int i = 0; i < inputOperand.length(); i++) {
-            arrayKeyOfValue[i] = searchOfKey(Character.toString(inputOperand.charAt(i)));
-        }
 
-        // Проходим по массиву значений и вносим результат
-        for (int i = 0; i < arrayKeyOfValue.length-1; i++){
-
-            //Если левое число меньше правого, то результат = правое - левое
-            if (arrayKeyOfValue[i] < arrayKeyOfValue[i+1]){
-                resultOfConverse += arrayKeyOfValue[i+1] - arrayKeyOfValue[i];
-                i++;
+        // Проверяем по каждому элементу
+        // Если элемент первый или больше предыдущего, то добавляем
+        // Если следующий элемент больше, то добавляем больший и отнимаем меньший *2
+        for (int i = 0; i < inputOperand.length(); i ++){
+            if (i == 0 || searchOfKey(Character.toString(inputOperand.charAt(i))) <= searchOfKey(Character.toString(inputOperand.charAt(i-1)))){
+                resultOfConverse += searchOfKey(Character.toString(inputOperand.charAt(i)));
             }
-
-            // Иначе плюсуем к результату текущее число
-            else {
-                resultOfConverse += arrayKeyOfValue[i];
+            else{
+                resultOfConverse += searchOfKey(Character.toString(inputOperand.charAt(i))) - 2*searchOfKey(Character.toString(inputOperand.charAt(i-1)));
             }
-        }
-
-        // Если 2 последних символа одинаковые, то добавляем римскую интерпритацию символов к ответу
-        // ***так как массив по размеру массива -1
-        if(arrayKeyOfValue.length >= 2) {
-            if (arrayKeyOfValue[arrayKeyOfValue.length - 1] == arrayKeyOfValue[arrayKeyOfValue.length - 2]) {
-                resultOfConverse += arrayKeyOfValue[arrayKeyOfValue.length - 1];
-            }
-        }
-
-        if(arrayKeyOfValue.length == 1){
-            resultOfConverse += arrayKeyOfValue[0];
         }
 
         return Integer.toString(resultOfConverse);

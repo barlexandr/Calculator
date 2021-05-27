@@ -22,8 +22,9 @@ public class Calculate {
 
     // Вычисление
     public static String Computation(String inputString) throws Exception {
-        String reverseString;
-        int operatorIndex = -1;
+        String reverseString = new String();
+        StringBuilder romanToArabicString = new StringBuilder();
+        Stack <Integer> operatorIndex = new Stack<>();
 
         // Если пользователь ввел числа в римской нотации, то переводим выражение в арабскую нотацию
         if(Validator.thisIsRoman){
@@ -33,18 +34,34 @@ public class Calculate {
             // Находим индекс вхождения оператора
             for (int i = 0; i < inputString.length(); i++){
                 if(isOperator(inputString.charAt(i))){
-                    operatorIndex = i;
-                    break;
+                    operatorIndex.push(i);
                 }
             }
 
             // Переписываем входящую строку в арабской нотации
-            inputString = Converter.toArabic(tempRomanToArabicString[0]) +
-                    inputString.charAt(operatorIndex) +
-                    Converter.toArabic(tempRomanToArabicString[1]);
+            for (int i = tempRomanToArabicString.length - 1; i > 0; i--) {
+                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[i]));
+                Converter.toArabic(tempRomanToArabicString[i-1]);
+                romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
+                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[i-1]));
+                i--;
+
+                if (operatorIndex.size() != 0){
+                    romanToArabicString.insert(0,inputString.charAt(operatorIndex.pop()));
+                }
+            }
+            if(tempRomanToArabicString.length > 2) {
+                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[0]));
+            }
+
+            // Перевод в ОПН
+            reverseString = ReversePolishNotation.reverseString(romanToArabicString.toString());
         }
-        // Перевод в ОПН
-        reverseString = ReversePolishNotation.reverseString(inputString);
+        else {
+            // Перевод в ОПН
+            reverseString = ReversePolishNotation.reverseString(inputString);
+        }
+
         // Проверяем каждый символ в строке
         for (int i = 0; i < reverseString.length(); i++) {
             // Если символ - цифра, то читаем число пока не разделитель или оператор и записываем в стек

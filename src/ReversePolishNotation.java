@@ -22,7 +22,7 @@ public class ReversePolishNotation {
     private static String getExpression(String input) throws Exception {
         String output = new String(); // Строка для хранения выражения
         Stack<Character> operatorStack = new Stack<>();
-        int countOperator = 0;
+//        int countOperator = 0;
 
         for (int i = 0; i < input.length(); i++) // Для каждого символа в входной строке
         {
@@ -45,14 +45,17 @@ public class ReversePolishNotation {
             // Если символ - оператор
             if (isOperator(input.charAt(i)))
             {
-                countOperator++;
+                if (isOperator(input.charAt(i-1))){
+                    throw new Exception("Введен двойной оператор");
+                }
+//                countOperator++;
                 if (!operatorStack.empty()) // Если в стеке есть элементы
                     output += operatorStack.pop() + " "; // Добавляем последний оператор из стека в строку с выражением
 
-                // Проверка на ввод только 1 оператора
-                if (countOperator > 1){
-                    throw new Exception("Вы ввели больше 1 оператора");
-                }
+//                // Проверка на ввод только 1 оператора
+//                if (countOperator > 1){
+//                    throw new Exception("Вы ввели больше 1 оператора");
+//                }
 
                 operatorStack.push(input.charAt(i));// Если стек пуст - добавляем операторов на вершину стека
             }

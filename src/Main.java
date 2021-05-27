@@ -6,6 +6,7 @@ public class Main {
         String inputString = scanner.nextLine();
 
         Validator.validation(inputString);
+        Calculate.Computation(inputString);
 
         System.out.println("Результат : " + Calculate.Computation(inputString));
     }

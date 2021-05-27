@@ -2,7 +2,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ArabicNumeral {
-    private String regexArabicAlphabet = "^([0-9]|10)[+*/-]([0-9]|10)$";
+    private String regexArabicAlphabet = "^-?(\\d{1,4}[+*/-]\\d{1,4})+";
+//    ^([0-9]|10)[+*/-]([0-9]|10)$
 
     // Проверка является ли число арабским
     public boolean isArabic(String number){
