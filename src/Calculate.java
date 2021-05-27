@@ -1,15 +1,17 @@
-import java.util.HashMap;
 import java.util.Stack;
 
 public class Calculate {
     static String result;
     static Stack <Integer> temp = new Stack<>();
+    static int countOfOperator = 0;
+    static int countOfElement = 0;
 
     // Проверка на оператор
     private static boolean isOperator(Character input)
     {
-        if (("+-/*".indexOf(input) != -1))
+        if (("+-/*()".indexOf(input) != -1)) {
             return true;
+        }
         return false;
     }
 
@@ -22,45 +24,7 @@ public class Calculate {
 
     // Вычисление
     public static String Computation(String inputString) throws Exception {
-        String reverseString = new String();
-        StringBuilder romanToArabicString = new StringBuilder();
-        Stack <Integer> operatorIndex = new Stack<>();
-
-        // Если пользователь ввел числа в римской нотации, то переводим выражение в арабскую нотацию
-        if(Validator.thisIsRoman){
-            // Разделяем по оператору
-            String[] tempRomanToArabicString = inputString.split("[+*/-]");
-
-            // Находим индекс вхождения оператора
-            for (int i = 0; i < inputString.length(); i++){
-                if(isOperator(inputString.charAt(i))){
-                    operatorIndex.push(i);
-                }
-            }
-
-            // Переписываем входящую строку в арабской нотации
-            for (int i = tempRomanToArabicString.length - 1; i > 0; i--) {
-                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[i]));
-                Converter.toArabic(tempRomanToArabicString[i-1]);
-                romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[i-1]));
-                i--;
-
-                if (operatorIndex.size() != 0){
-                    romanToArabicString.insert(0,inputString.charAt(operatorIndex.pop()));
-                }
-            }
-            if(tempRomanToArabicString.length > 2) {
-                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicString[0]));
-            }
-
-            // Перевод в ОПН
-            reverseString = ReversePolishNotation.reverseString(romanToArabicString.toString());
-        }
-        else {
-            // Перевод в ОПН
-            reverseString = ReversePolishNotation.reverseString(inputString);
-        }
+        String reverseString = Converter.ConverterToRPN(inputString);
 
         // Проверяем каждый символ в строке
         for (int i = 0; i < reverseString.length(); i++) {
@@ -75,11 +39,19 @@ public class Calculate {
                         break;
                 }
                 temp.push(Integer.parseInt(tempString));
+                countOfElement++;
                 i--;
             }
 
             // Если оператор, то выполняем над 2 последними элементами стэка действие
             if (isOperator(reverseString.charAt(i))) {
+
+                if ("+-*/".indexOf(reverseString.charAt(i)) != -1) {
+                    countOfOperator++;
+                }
+                if (countOfOperator >= countOfElement)
+                    throw new Exception("Введено слишком много операторов");
+
                 int a = temp.pop();
                 int b = temp.pop();
 

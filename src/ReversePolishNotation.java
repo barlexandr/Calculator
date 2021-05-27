@@ -13,16 +13,30 @@ public class ReversePolishNotation {
     // Возвращает true, если проверяемый символ - оператор
     private static boolean isOperator(Character input)
     {
-        if (("+-/*".indexOf(input) != -1))
+        if (("+-/*()".indexOf(input) != -1))
             return true;
         return false;
     }
 
+    //Метод возвращает приоритет оператора
+    private static byte GetPriority(char operator)
+    {
+        switch (operator)
+        {
+            case '(': return 0;
+            case ')': return 1;
+            case '-': return 2;
+            case '+': return 3;
+            case '*': return 4;
+            case '/': return 4;
+            default: return 5;
+        }
+    }
+
     // Метод, преобразующий в обратную польскую запись
-    private static String getExpression(String input) throws Exception {
+    private static String getExpression(String input) {
         String output = new String(); // Строка для хранения выражения
         Stack<Character> operatorStack = new Stack<>();
-//        int countOperator = 0;
 
         for (int i = 0; i < input.length(); i++) // Для каждого символа в входной строке
         {
@@ -42,22 +56,36 @@ public class ReversePolishNotation {
                 i--; // Возвращаемся на один символ назад
             }
 
-            // Если символ - оператор
-            if (isOperator(input.charAt(i)))
-            {
-                if (isOperator(input.charAt(i-1))){
-                    throw new Exception("Введен двойной оператор");
+            // Если символ оператор
+            if (isOperator(input.charAt(i))) {
+                //Если оператор открывающая скобка, то записываем ее в стек
+                if (input.charAt(i) == '(')
+                    operatorStack.push(input.charAt(i));
+
+                //Если оператор закрывающая скобка, то выписываем все операторы до открывающей скобки
+                else if (input.charAt(i) == ')')
+                {
+                    char operator = operatorStack.pop();
+
+                    while (operator != '(') {
+                        output += String.valueOf(operator) + " ";
+                        operator = operatorStack.pop();
+                    }
                 }
-//                countOperator++;
-                if (!operatorStack.empty()) // Если в стеке есть элементы
-                    output += operatorStack.pop() + " "; // Добавляем последний оператор из стека в строку с выражением
 
-//                // Проверка на ввод только 1 оператора
-//                if (countOperator > 1){
-//                    throw new Exception("Вы ввели больше 1 оператора");
-//                }
-
-                operatorStack.push(input.charAt(i));// Если стек пуст - добавляем операторов на вершину стека
+                // Если любой другой оператор
+                else {
+                    // Если в стеке есть элементы
+                    if (!operatorStack.empty()) {
+                        //И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека,
+                        // то добавляем последний оператор из стека в строку
+                        if (GetPriority(input.charAt(i)) <= GetPriority(operatorStack.peek())) {
+                            output += operatorStack.pop() + " ";
+                        }
+                    }
+                    // Если стек пуст - добавляем операторов на вершину стека
+                    operatorStack.push(input.charAt(i));
+                }
             }
         }
 
