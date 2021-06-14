@@ -33,9 +33,7 @@ public class Converter {
     // Проверка на оператор
     private static boolean isOperator(Character input)
     {
-        if (("()+-/*".indexOf(input) != -1))
-            return true;
-        return false;
+        return "()+-/*".indexOf(input) != -1;
     }
 
     // Перевод из арабских цифр в римские
@@ -87,8 +85,7 @@ public class Converter {
             String[] tempRomanToArabicString = inputString.split("[()+*/-]");
 
             // Создаем лист, чтобы удалить из него пустые элементы
-            List <String> tempRomanToArabicList = new ArrayList<>();
-            tempRomanToArabicList.addAll(Arrays.asList(tempRomanToArabicString));
+            List<String> tempRomanToArabicList = new ArrayList<>(Arrays.asList(tempRomanToArabicString));
 
             while (tempRomanToArabicList.contains("")) {
                 tempRomanToArabicList.remove("");
@@ -115,6 +112,14 @@ public class Converter {
                 // Заносим операнды и операторы в строку, которая будет конвертирована в ОПН
                 romanToArabicString.insert(0, Converter.toArabic(String.valueOf(tempRomanToArabicList.get(i))));
                 romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
+
+                if (!operatorIndex.empty()) {
+                    if (inputString.charAt(operatorIndex.peek()) == '(' && !isOperator(romanToArabicString.charAt(0)) ||
+                            inputString.charAt(operatorIndex.peek()) == ')') {
+                        romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
+                    }
+                }
+
                 romanToArabicString.insert(0, Converter.toArabic(String.valueOf(tempRomanToArabicList.get(i-1))));
                 i--;
 
@@ -127,18 +132,19 @@ public class Converter {
             // Если размер листа с операндами больше 2,
             // то в предыдущем цикле последний операнд не был обработан.
             // Записываем последний операнд в строку.
-            if (tempRomanToArabicList.size() > 2) {
-                // И последний записанный оператор - скобка,
-                // то записываем в строку следующий оператор
-                if(operatorIndex.size() > 1) {
-                    while (inputString.charAt(operatorIndex.peek() + 1) == '(' ||
-                            inputString.charAt(operatorIndex.peek() + 1) == ')') {
+            if(!operatorIndex.empty()) {
+                if (tempRomanToArabicList.size() > 2) {
+                    // И последний записанный оператор - скобка,
+                    // то записываем в строку следующий оператор
+                    if (operatorIndex.size() > 1) {
+                        while (inputString.charAt(operatorIndex.peek() + 1) == '(' ||
+                                inputString.charAt(operatorIndex.peek() + 1) == ')') {
+                            romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
+                        }
+                    } else
                         romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                    }
+                    romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicList.get(0)));
                 }
-                else
-                    romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicList.get(0)));
             }
 
             // Перевод в ОПН
