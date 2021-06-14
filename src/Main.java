@@ -2,18 +2,25 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        System.out.println("Вы зашли в калькулятор римских и арабских чисел.\n" +
-                "Калькулятор умеет выполнять следующие действия: + - * /\n" +
-                "Выражение вводите в 1 строчку без знака равенства. При записи можно использовать скобки.\n" +
-                "Калькулятор выполняет действия только с целыми числами.\n" +
-                "Записывать выражение можно только в 1 из нотаций: римской или арабской.\n" +
-                "Введите Ваше выражение:");
-        Scanner scanner = new Scanner(System.in);
-        String inputString = scanner.nextLine();
+        System.out.println("""
+                Вы зашли в калькулятор римских и арабских чисел.
+                Калькулятор умеет выполнять следующие действия: + - * /
+                Выражение вводите в 1 строчку без знака равенства. При записи можно использовать скобки.
+                Калькулятор выполняет действия только с целыми числами.
+                Записывать выражение можно только в 1 из нотаций: римской или арабской.
+                Чтобы выйти из приложения введите exit.
+                Введите Ваше выражение:""");
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            String inputString = scanner.nextLine();
 
-        Validator.validation(inputString);
-        Calculate.Computation(inputString);
+            if (inputString.equals("exit"))
+                break;
 
-        System.out.println("Результат : " + Calculate.Computation(inputString));
+            Validator.validation(inputString);
+            Calculate.Computation(inputString);
+
+            System.out.println("Результат : " + Calculate.Computation(inputString));
+        }
     }
 }
