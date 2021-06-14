@@ -9,17 +9,12 @@ public class Calculate {
     // Проверка на оператор
     private static boolean isOperator(Character input)
     {
-        if (("+-/*()".indexOf(input) != -1)) {
-            return true;
-        }
-        return false;
+        return "+-/*()".indexOf(input) != -1;
     }
 
     // Проверка на разделитель
     private static boolean isDelimiter(Character input){
-        if ((" ".indexOf(input)) != -1)
-            return true;
-        return false;
+        return (" ".indexOf(input)) != -1;
     }
 
     // Вычисление
@@ -30,15 +25,15 @@ public class Calculate {
         for (int i = 0; i < reverseString.length(); i++) {
             // Если символ - цифра, то читаем число пока не разделитель или оператор и записываем в стек
             if (Character.isDigit(reverseString.charAt(i))) {
-                String tempString = "";
+                StringBuilder tempString = new StringBuilder();
 
                 while (!isOperator(reverseString.charAt(i)) && !isDelimiter(reverseString.charAt(i))) {
-                    tempString += reverseString.charAt(i);
+                    tempString.append(reverseString.charAt(i));
                     i++;
                     if (i == reverseString.length())
                         break;
                 }
-                temp.push(Integer.parseInt(tempString));
+                temp.push(Integer.parseInt(tempString.toString()));
                 countOfElement++;
                 i--;
             }
@@ -56,18 +51,10 @@ public class Calculate {
                 int b = temp.pop();
 
                 switch (reverseString.charAt(i)) {
-                    case '+':
-                        result = String.valueOf(b + a);
-                        break;
-                    case '-':
-                        result = String.valueOf(b - a);
-                        break;
-                    case '*':
-                        result = String.valueOf(b * a);
-                        break;
-                    case '/':
-                        result = String.valueOf(b / a);
-                        break;
+                    case '+' -> result = String.valueOf(b + a);
+                    case '-' -> result = String.valueOf(b - a);
+                    case '*' -> result = String.valueOf(b * a);
+                    case '/' -> result = String.valueOf(b / a);
                 }
                 temp.push(Integer.parseInt(result));
             }

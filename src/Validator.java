@@ -11,6 +11,7 @@ public class Validator {
             throw new Exception("Введенные данные не верны");
         }
 
+        // Выставляем флаг для определения системы счисления
         if (romanNumber.isRoman(input) && !arabicNumber.isArabic(input)){
             thisIsRoman = true;
         }
