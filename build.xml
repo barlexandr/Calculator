@@ -2,7 +2,7 @@
 <project name="calculator" default="all">
   
   
-  <property file="calculator.properties"/>
+  <property file="build.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
   <!-- 
   <property name="skip.tests" value="true"/>
@@ -131,27 +131,88 @@
   <property name="project.jdk.home" value="${jdk.home.openjdk-16}"/>
   <property name="project.jdk.bin" value="${jdk.bin.openjdk-16}"/>
   <property name="project.jdk.classpath" value="jdk.classpath.openjdk-16"/>
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <fileset dir="${javac2.home}">
-      <include name="jdom.jar"/>
-      <include name="asm-all*.jar"/>
-      <include name="forms-*.jar"/>
-      <include name="forms_rt.jar"/>
-    </fileset>
-    <fileset dir="${idea.home}/plugins/java/lib">
-      <include name="javac2.jar"/>
-    </fileset>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
-  <import file="${basedir}/module_calculator.xml"/>
+  
+  <!-- Module Calculator -->
+  
+  <dirname property="module.calculator.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.calculator" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.calculator" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.calculator" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.calculator" value="-encoding UTF-8 -source 16 -target 16 ${compiler.args}"/>
+  
+  <property name="calculator.output.dir" value="${module.calculator.basedir}/out/production/Calculator"/>
+  <property name="calculator.testoutput.dir" value="${module.calculator.basedir}/out/test/Calculator"/>
+  
+  <path id="calculator.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="calculator.module.production.classpath">
+    <path refid="${module.jdk.classpath.calculator}"/>
+  </path>
+  
+  <path id="calculator.runtime.production.module.classpath">
+    <pathelement location="${calculator.output.dir}"/>
+  </path>
+  
+  <path id="calculator.module.classpath">
+    <path refid="${module.jdk.classpath.calculator}"/>
+    <pathelement location="${calculator.output.dir}"/>
+  </path>
+  
+  <path id="calculator.runtime.module.classpath">
+    <pathelement location="${calculator.testoutput.dir}"/>
+    <pathelement location="${calculator.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.calculator">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.calculator">
+    <patternset refid="excluded.from.module.calculator"/>
+  </patternset>
+  
+  <path id="calculator.module.sourcepath">
+    <dirset dir="${module.calculator.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.calculator" depends="compile.module.calculator.production,compile.module.calculator.tests" description="Compile module Calculator"/>
+  
+  <target name="compile.module.calculator.production" description="Compile module Calculator; production classes">
+    <mkdir dir="${calculator.output.dir}"/>
+    <javac destdir="${calculator.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.calculator}/javac">
+      <compilerarg line="${compiler.args.calculator}"/>
+      <bootclasspath refid="calculator.module.bootclasspath"/>
+      <classpath refid="calculator.module.production.classpath"/>
+      <src refid="calculator.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.calculator"/>
+    </javac>
+    
+    <copy todir="${calculator.output.dir}">
+      <fileset dir="${module.calculator.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.calculator.tests" depends="compile.module.calculator.production" description="compile module Calculator; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.calculator" description="cleanup module">
+    <delete dir="${calculator.output.dir}"/>
+    <delete dir="${calculator.testoutput.dir}"/>
+  </target>
   
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
