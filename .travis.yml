@@ -1,15 +1,9 @@
+jdk: openjdk10
 script:
-  - cd src
-  - java -version
-  - javac -version
-
-  - javac -cp ./src/ArabicNumeral.java
-  - javac -cp ./src/Calculate.java
-  - javac -cp ./src/Converter.java
-  - javac -cp ./src/Main.java
-  - javac -cp ./src/ReversePolishNotation.java
-  - javac -cp ./src/RomanNumeral.java
-  - javac -cp ./src/Validator.java
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - jdk_switcher use openjdk10
+  - # do stuff with OpenJDK 10
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - chmod +x $TRAVIS_BUILD_DIR/install-jdk.sh
+  - export JAVA_HOME=$HOME/openjdk11
+  - $TRAVIS_BUILD_DIR/install-jdk.sh -F 11 --target $JAVA_HOME
+  - # do stuff with open OpenJDK 11
