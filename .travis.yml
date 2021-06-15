@@ -1,6 +1,6 @@
 language: java
 sudo: false
-jdk: openjdk11
+jdk: openjdk16
 
 notifications:
   email:
