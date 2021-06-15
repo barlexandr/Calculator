@@ -5,9 +5,6 @@ os:
 jdk: 
 	openjdk11
 
-install:
-	- choco install java
-
 script:
 
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
