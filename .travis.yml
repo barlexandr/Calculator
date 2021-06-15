@@ -1,4 +1,10 @@
 language: java
 sudo: false
-os: windows
 jdk: openjdk11
+
+notifications:
+  email:
+    recipients:
+      - alexander.m.barabash@gmail.com
+    on_success: never
+    on_failure: always
