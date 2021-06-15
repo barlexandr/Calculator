@@ -1,9 +1,15 @@
-language: java
-sudo: false # faster builds
+script:
+  - cd src
+  - java -version
+  - javac -version
 
-jdk:
-  - oraclejdk11
-  - oraclejdk14
+  - javac -cp ./src/ArabicNumeral.java
+  - javac -cp ./src/Calculate.java
+  - javac -cp ./src/Converter.java
+  - javac -cp ./src/Main.java
+  - javac -cp ./src/ReversePolishNotation.java
+  - javac -cp ./src/RomanNumeral.java
+  - javac -cp ./src/Validator.java
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
