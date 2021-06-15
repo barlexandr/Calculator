@@ -10,3 +10,6 @@ This calculator is written in java using RPN
 * Calculator can do + - * / actions on integers
 * Сalculator accepts numbers in Roman or Arabic notation and returns the corresponding answer 
 * Сalculator supports the use of parentheses 
+
+# Demonstration of work
+![image](https://github.com/barlexandr/Calculator/blob/master/demonstration%20of%20the%20calculator.gif)
