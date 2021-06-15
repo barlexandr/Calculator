@@ -13,7 +13,9 @@ public class Converter {
         put(50, "L");
         put(90, "XC");
         put(100, "C");
+        put(400, "CD");
         put(500, "D");
+        put(900, "CM");
         put(1000, "M");
     }};
 
@@ -28,12 +30,6 @@ public class Converter {
             }
         }
         throw new Exception("Невозможно найти ключ");
-    }
-
-    // Проверка на оператор
-    private static boolean isOperator(Character input)
-    {
-        return "()+-/*".indexOf(input) != -1;
     }
 
     // Перевод из арабских цифр в римские
@@ -77,10 +73,10 @@ public class Converter {
     public static String ConverterToRPN(String inputString) throws Exception {
         String reverseString;
         StringBuilder romanToArabicString = new StringBuilder();
-        Stack<Integer> operatorIndex = new Stack<>();
 
         // Если пользователь ввел числа в римской нотации, то переводим выражение в арабскую нотацию
         if (Validator.thisIsRoman) {
+
             // Разделяем по оператору
             String[] tempRomanToArabicString = inputString.split("[()+*/-]");
 
@@ -90,60 +86,38 @@ public class Converter {
             while (tempRomanToArabicList.contains("")) {
                 tempRomanToArabicList.remove("");
             }
+            
+            // Пока входящая строка не пустая
+            while ((inputString.length() > 0) ) {
 
-            // Находим индекс вхождения оператора
-            for (int i = 0; i < inputString.length(); i++) {
-                if (isOperator(inputString.charAt(i))) {
-                    operatorIndex.push(i);
-                }
-            }
+                // Если временный лист с операндами не пустой
+                if (!tempRomanToArabicList.isEmpty()) {
+                    
+                    //Берем 0 значение 
+                    String sy = String.valueOf(tempRomanToArabicList.get(0));
 
-            // Переписываем входящую строку в арабской нотации
-            for (int i = tempRomanToArabicList.size() - 1; i > 0; i--) {
-                // Если верхний символ стека - скобка, то вытаскиваем ее в строку,
-                // которая будет конвертирована в ОПН
-                while (inputString.charAt(operatorIndex.peek()) == '('||
-                        inputString.charAt(operatorIndex.peek()) == ')'||
-                        inputString.charAt(operatorIndex.peek()+1) == '('||
-                        inputString.charAt(operatorIndex.peek()+1) == ')'){
-                    romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                }
-
-                // Заносим операнды и операторы в строку, которая будет конвертирована в ОПН
-                romanToArabicString.insert(0, Converter.toArabic(String.valueOf(tempRomanToArabicList.get(i))));
-                romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-
-                if (!operatorIndex.empty()) {
-                    if (inputString.charAt(operatorIndex.peek()) == '(' && !isOperator(romanToArabicString.charAt(0)) ||
-                            inputString.charAt(operatorIndex.peek()) == ')') {
-                        romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
+                    // Если входящая строка начинается с этого значения, то удаляем из временного листа значение,
+                    // конвертируем его в арабскую систему счисления, записываем в строку, содержащую конвертированные символы
+                    // и обрезаем входящую строку на длину этого значения
+                    if (inputString.startsWith(sy)) {
+                        sy = String.valueOf(tempRomanToArabicList.remove(0));
+                        romanToArabicString.append(Converter.toArabic(sy));
+                        inputString = inputString.substring(sy.length());
                     }
                 }
 
-                romanToArabicString.insert(0, Converter.toArabic(String.valueOf(tempRomanToArabicList.get(i-1))));
-                i--;
-
-                // Если не последний операнд, то заносим в строку, подлежащую конвертации в ОПН
-                if (operatorIndex.size() != 0) {
-                    romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                }
-            }
-
-            // Если размер листа с операндами больше 2,
-            // то в предыдущем цикле последний операнд не был обработан.
-            // Записываем последний операнд в строку.
-            if(!operatorIndex.empty()) {
-                if (tempRomanToArabicList.size() > 2) {
-                    // И последний записанный оператор - скобка,
-                    // то записываем в строку следующий оператор
-                    if (operatorIndex.size() > 1) {
-                        while (inputString.charAt(operatorIndex.peek() + 1) == '(' ||
-                                inputString.charAt(operatorIndex.peek() + 1) == ')') {
-                            romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                        }
-                    } else
-                        romanToArabicString.insert(0, inputString.charAt(operatorIndex.pop()));
-                    romanToArabicString.insert(0, Converter.toArabic(tempRomanToArabicList.get(0)));
+                // Если входящая строка начинается с оператора
+                if (inputString.startsWith("(") ||
+                            inputString.startsWith(")") ||
+                            inputString.startsWith("*") ||
+                            inputString.startsWith("/") ||
+                            inputString.startsWith("-") ||
+                            inputString.startsWith("+")) {
+                    
+                    // Добавляем оператор в строку, содержащую конвертированные символы
+                    // и обрезаем входящую строку на 1 символ
+                    romanToArabicString.append(inputString.charAt(0));
+                    inputString = inputString.substring(1);
                 }
             }
 
