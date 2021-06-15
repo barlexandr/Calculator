@@ -2,6 +2,9 @@ language: java
 sudo: false
 jdk: openjdk16
 
+script: 'true'
+# тк у нас пока что нет тестов
+
 notifications:
   email:
     recipients:
