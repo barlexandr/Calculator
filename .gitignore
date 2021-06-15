@@ -21,7 +21,6 @@ docs
 
 target
 build
-.out/
 
 # Package Files #
 *.jar
