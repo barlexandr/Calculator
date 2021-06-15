@@ -1,6 +1,6 @@
 # Calculator
 [![CodeFactor](https://www.codefactor.io/repository/github/barlexandr/calculator/badge)](https://www.codefactor.io/repository/github/barlexandr/calculator)
-![Travis](https://travis-ci.com/barlexandr/Calculator.svg?branch=master)
+[![Travis](https://travis-ci.com/barlexandr/Calculator.svg?branch=master)](https://travis-ci.com/barlexandr/Calculator.svg?branch=master)
 ![https://img.shields.io/badge/Language-Java-blue](https://img.shields.io/badge/Language-Java-blue) ![https://img.shields.io/badge/IntelliJ%20IDEA-%202021.1.2-blue](https://img.shields.io/badge/IntelliJ%20IDEA-%202021.1.2-blue)
 
 
