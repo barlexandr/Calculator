@@ -1,12 +1,9 @@
-script:
-  - cd src
-  - java -version
-  - javac -version
-  
-  - javac -cp .:./bin/ -d ./bin/ ./src/ArabicNumeral.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/Calculate.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/Converter.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/Main.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/ReversePolishNotation.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/RomanNumeral.java
-  - javac -cp .:./bin/ -d ./bin/ ./src/Validator.java
+language: java
+sudo: false # faster builds
+
+jdk:
+  - oraclejdk11
+  - oraclejdk14
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
